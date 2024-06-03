@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Recipe App</string>
+    <string name="profile_image_desc">Profile Image</string>
+    <string name="login">Login</string>
+    <string name="signup">Sign Up</string>
+    <string name="logout">Logout</string>
+    <string name="recipe_name_hint">Recipe Name</string>
+    <string name="recipe_type_hint">Recipe Type</string>
+    <string name="ingredients_hint">Ingredients</string>
+    <string name="steps_hint">Steps</string>
+    <string name="add_recipe">Add Recipe</string>
+    <string name="update_recipe">Update Recipe</string>
+    <string name="delete_recipe">Delete Recipe</string>
+    <string name="recipe_name">Recipe Name</string>
+    <string name="recipe_type">Recipe Type</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="profile">Profile</string>
+    <string name="ingredients">Ingredients</string>
+    <string name="steps">Steps</string>
+    <string name="home">Home</string>
+    <string name="favorite">Favorite</string>
+    <string name="recipe_image_desc">Recipe Image Desription</string>
+</resources>

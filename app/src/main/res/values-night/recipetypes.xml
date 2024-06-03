@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="recipe_types">
+        <item>Appetizer</item>
+        <item>Main Course</item>
+        <item>Dessert</item>
+        <item>Snack</item>
+        <item>Drink</item>
+    </string-array>
+</resources>
