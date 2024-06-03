@@ -89,6 +89,6 @@ class SignupActivity : AppCompatActivity() {
         val defaultProfileImageUri = "android.resource://${packageName}/${R.drawable.default_profile}"
         val user = User(userId = userId, name = name, email = email, profileImageUri = defaultProfileImageUri)
         userViewModel.insertUser(user)
-        Toast.makeText(this, "User information saved", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show()
     }
 }
