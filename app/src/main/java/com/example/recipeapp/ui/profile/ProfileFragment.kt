@@ -22,6 +22,7 @@ import com.example.recipeapp.R
 import com.example.recipeapp.data.RecipeDatabase
 import com.example.recipeapp.data.UserRepository
 import com.example.recipeapp.entities.User
+import com.example.recipeapp.ui.login.LoginActivity
 import com.example.recipeapp.viewmodels.UserViewModel
 import com.example.recipeapp.viewmodels.UserViewModelFactory
 import com.google.firebase.auth.FirebaseAuth
@@ -33,6 +34,7 @@ class ProfileFragment : Fragment() {
     private lateinit var emailTextView: TextView
     private lateinit var saveButton: Button
     private lateinit var editButton: Button
+    private lateinit var logoutButton: Button
     private lateinit var userViewModel: UserViewModel
     private lateinit var auth: FirebaseAuth
     private var selectedImageUri: Uri? = null
@@ -63,6 +65,7 @@ class ProfileFragment : Fragment() {
         emailTextView = view.findViewById(R.id.emailTextView)
         saveButton = view.findViewById(R.id.saveButton)
         editButton = view.findViewById(R.id.editButton)
+        logoutButton = view.findViewById(R.id.logoutButton)
 
         val userId = auth.currentUser?.uid
         if (userId != null) {
@@ -92,6 +95,10 @@ class ProfileFragment : Fragment() {
         saveButton.setOnClickListener {
             saveChanges()
             enableEditing(false)
+        }
+
+        logoutButton.setOnClickListener {
+            logout()
         }
 
         // Register the launcher for image picking
@@ -128,5 +135,13 @@ class ProfileFragment : Fragment() {
         val userId = auth.currentUser?.uid ?: return
         val user = User(userId = userId, name = name, email = email, profileImageUri = profileImageUri)
         userViewModel.insertUser(user)
+    }
+
+    private fun logout() {
+        auth.signOut()
+        val intent = Intent(requireContext(), LoginActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        requireActivity().finish()
     }
 }

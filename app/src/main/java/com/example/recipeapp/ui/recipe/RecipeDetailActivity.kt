@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
@@ -29,6 +30,10 @@ class RecipeDetailActivity : AppCompatActivity() {
     private lateinit var typeTextView: TextView
     private lateinit var ingredientsTextView: TextView
     private lateinit var stepsTextView: TextView
+    private lateinit var nameEditText: EditText
+    private lateinit var typeEditText: EditText
+    private lateinit var ingredientsEditText: EditText
+    private lateinit var stepsEditText: EditText
     private lateinit var favoriteButton: Button
     private lateinit var editButton: Button
     private lateinit var deleteButton: Button
@@ -49,6 +54,8 @@ class RecipeDetailActivity : AppCompatActivity() {
         typeTextView = findViewById(R.id.typeTextView)
         ingredientsTextView = findViewById(R.id.ingredientsTextView)
         stepsTextView = findViewById(R.id.stepsTextView)
+        ingredientsEditText = findViewById(R.id.ingredientsEditText)
+        stepsEditText = findViewById(R.id.stepsEditText)
         favoriteButton = findViewById(R.id.favoriteButton)
         editButton = findViewById(R.id.editButton)
         deleteButton = findViewById(R.id.deleteButton)
@@ -75,13 +82,13 @@ class RecipeDetailActivity : AppCompatActivity() {
         val userId = auth.currentUser?.uid
 
         if (userId != null) {
-            recipeViewModel.getRecipeById(recipeId, userId).observe(this, { recipe ->
+            recipeViewModel.getRecipeById(recipeId, userId).observe(this) { recipe ->
                 if (recipe != null) {
                     displayRecipeDetails(recipe)
                     isFavorite = recipe.isFavorite
                     updateFavoriteButton()
                 }
-            })
+            }
 
             favoriteButton.setOnClickListener {
                 if (isFavorite) {
@@ -107,7 +114,8 @@ class RecipeDetailActivity : AppCompatActivity() {
                     type = typeTextView.text.toString(),
                     ingredients = ingredientsTextView.text.toString(),
                     steps = stepsTextView.text.toString(),
-                    imageUri = selectedImageUri?.toString() ?: "android.resource://${packageName}/${R.drawable.placeholder_image}",
+                    imageUri = selectedImageUri?.toString()
+                        ?: "android.resource://${packageName}/${R.drawable.placeholder_image}",
                     isFavorite = isFavorite
                 )
                 recipeViewModel.deleteRecipe(recipe)
@@ -121,12 +129,13 @@ class RecipeDetailActivity : AppCompatActivity() {
             }
 
             // Register the launcher for image picking
-            imagePickerLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-                if (result.resultCode == RESULT_OK && result.data != null) {
-                    selectedImageUri = result.data?.data
-                    recipeImageView.setImageURI(selectedImageUri)
+            imagePickerLauncher =
+                registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                    if (result.resultCode == RESULT_OK && result.data != null) {
+                        selectedImageUri = result.data?.data
+                        recipeImageView.setImageURI(selectedImageUri)
+                    }
                 }
-            }
 
             recipeImageView.setOnClickListener {
                 if (saveButton.visibility == View.VISIBLE) {
@@ -141,6 +150,8 @@ class RecipeDetailActivity : AppCompatActivity() {
         typeTextView.text = recipe.type
         ingredientsTextView.text = recipe.ingredients
         stepsTextView.text = recipe.steps
+        ingredientsEditText.setText(recipe.ingredients)
+        stepsEditText.setText(recipe.steps)
         Glide.with(this)
             .load(recipe.imageUri)
             .placeholder(R.drawable.placeholder_image)
@@ -152,15 +163,29 @@ class RecipeDetailActivity : AppCompatActivity() {
     }
 
     private fun enableEditing(enable: Boolean) {
-        nameTextView.isEnabled = enable
-        typeTextView.isEnabled = enable
-        ingredientsTextView.isEnabled = enable
-        stepsTextView.isEnabled = enable
-        recipeImageView.isClickable = enable
-        favoriteButton.visibility = if (enable) View.GONE else View.VISIBLE
-        editButton.visibility = if (enable) View.GONE else View.VISIBLE
-        deleteButton.visibility = if (enable) View.GONE else View.VISIBLE
-        saveButton.visibility = if (enable) View.VISIBLE else View.GONE
+        if (enable) {
+            nameTextView.visibility = View.VISIBLE
+            typeTextView.visibility = View.VISIBLE
+            ingredientsTextView.visibility = View.GONE
+            stepsTextView.visibility = View.GONE
+            ingredientsEditText.visibility = View.VISIBLE
+            stepsEditText.visibility = View.VISIBLE
+            favoriteButton.visibility = View.GONE
+            editButton.visibility = View.GONE
+            deleteButton.visibility = View.GONE
+            saveButton.visibility = View.VISIBLE
+        } else {
+            nameTextView.visibility = View.VISIBLE
+            typeTextView.visibility = View.VISIBLE
+            ingredientsTextView.visibility = View.VISIBLE
+            stepsTextView.visibility = View.VISIBLE
+            ingredientsEditText.visibility = View.GONE
+            stepsEditText.visibility = View.GONE
+            favoriteButton.visibility = View.VISIBLE
+            editButton.visibility = View.VISIBLE
+            deleteButton.visibility = View.VISIBLE
+            saveButton.visibility = View.GONE
+        }
     }
 
     private fun selectImage() {
@@ -172,9 +197,10 @@ class RecipeDetailActivity : AppCompatActivity() {
     private fun saveChanges() {
         val name = nameTextView.text.toString()
         val type = typeTextView.text.toString()
-        val ingredients = ingredientsTextView.text.toString()
-        val steps = stepsTextView.text.toString()
-        val imageUri = selectedImageUri?.toString() ?: "android.resource://${packageName}/${R.drawable.placeholder_image}"
+        val ingredients = ingredientsEditText.text.toString()
+        val steps = stepsEditText.text.toString()
+        val imageUri = selectedImageUri?.toString()
+            ?: "android.resource://${packageName}/${R.drawable.placeholder_image}"
 
         val userId = auth.currentUser?.uid ?: return
         val recipe = Recipe(
