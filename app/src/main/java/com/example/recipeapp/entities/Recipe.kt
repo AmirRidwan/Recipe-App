@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "recipe")
 data class Recipe(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val userId: String, // Add this field to store the ID of the user who created the recipe
+    val userId: String,
     val name: String,
     val type: String,
     val ingredients: String,

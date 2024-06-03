@@ -159,7 +159,7 @@ class RecipeDetailActivity : AppCompatActivity() {
     }
 
     private fun updateFavoriteButton() {
-        favoriteButton.text = if (isFavorite) "Remove from Favorites" else "Add to Favorites"
+        favoriteButton.text = if (isFavorite) "Remove from Favorite" else "Add to Favorite"
     }
 
     private fun enableEditing(enable: Boolean) {
@@ -215,6 +215,5 @@ class RecipeDetailActivity : AppCompatActivity() {
         )
         recipeViewModel.updateRecipe(recipe)
         Toast.makeText(this, "Recipe updated", Toast.LENGTH_SHORT).show()
-        finish()
     }
 }

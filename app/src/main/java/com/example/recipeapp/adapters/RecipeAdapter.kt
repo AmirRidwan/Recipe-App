@@ -1,5 +1,6 @@
 package com.example.recipeapp.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,10 +43,14 @@ class RecipeAdapter(private val onRecipeClick: (Recipe) -> Unit) : ListAdapter<R
         fun bind(recipe: Recipe) {
             recipeNameTextView.text = recipe.name
             recipeTypeTextView.text = recipe.type
+
             if (recipe.imageUri.isNotEmpty()) {
+                Log.d("RecipeAdapter", "Loading image from URI: ${recipe.imageUri}")
+
                 Glide.with(itemView.context)
                     .load(recipe.imageUri)
                     .placeholder(R.drawable.placeholder_image)
+                    .error(R.drawable.error_image) // Add an error placeholder
                     .into(recipeImageView)
             } else {
                 recipeImageView.setImageResource(R.drawable.placeholder_image)

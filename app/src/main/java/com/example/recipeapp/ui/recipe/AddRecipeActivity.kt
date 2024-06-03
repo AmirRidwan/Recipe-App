@@ -3,11 +3,11 @@ package com.example.recipeapp.ui.recipe
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Spinner
-import android.widget.ArrayAdapter
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -59,9 +59,11 @@ class AddRecipeActivity : AppCompatActivity() {
         addRecipeButton = findViewById(R.id.add_recipe_button)
         recipeImageView = findViewById(R.id.recipe_image_view)
 
-        // Load recipe types from XML resource
+        // Load recipe types from XML resource and filter out "All Types"
         val recipeTypes = resources.getStringArray(R.array.recipe_types)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, recipeTypes)
+        val filteredRecipeTypes = recipeTypes.filter { it != "All Types" }
+
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, filteredRecipeTypes)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         typeSpinner.adapter = adapter
 

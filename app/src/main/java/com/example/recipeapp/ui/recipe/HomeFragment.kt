@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
             recipeTypeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
                     val selectedType = parent.getItemAtPosition(position) as String
-                    if (selectedType != "All") {
+                    if (selectedType != "All Types") {
                         recipeViewModel.filterRecipesByType(selectedType, userId).observe(viewLifecycleOwner, Observer { recipes ->
                             updateUI(recipes)
                         })
